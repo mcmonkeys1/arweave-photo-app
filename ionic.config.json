@@ -1,5 +1,5 @@
 {
-  "name": "arweave-photo-app",
+  "name": "photo-gallery-capacitor-react",
   "integrations": {
     "capacitor": {}
   },

@@ -1,14 +1,10 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonFab, IonFabButton, IonIcon, IonGrid, IonRow, IonCol, IonImg, IonActionSheet } from '@ionic/react';
 import { camera, trash, close } from 'ionicons/icons';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, 
-         IonFab, IonFabButton, IonIcon, IonGrid, IonRow, 
-         IonCol, IonImg, IonActionSheet } from '@ionic/react';
 import { usePhotoGallery, Photo } from '../hooks/usePhotoGallery';
 
-
-
 const Tab2: React.FC = () => {
-  const { photos, takePhoto, deletePhoto } = usePhotoGallery();
+  const { deletePhoto, photos, takePhoto } = usePhotoGallery();
   const [photoToDelete, setPhotoToDelete] = useState<Photo>();
 
   return (
@@ -27,12 +23,14 @@ const Tab2: React.FC = () => {
               </IonCol>
             ))}
           </IonRow>
-        </IonGrid>        
+        </IonGrid>
+
         <IonFab vertical="bottom" horizontal="center" slot="fixed">
           <IonFabButton onClick={() => takePhoto()}>
             <IonIcon icon={camera}></IonIcon>
           </IonFabButton>
         </IonFab>
+
         <IonActionSheet
           isOpen={!!photoToDelete}
           buttons={[{
@@ -52,6 +50,8 @@ const Tab2: React.FC = () => {
           }]}
           onDidDismiss={() => setPhotoToDelete(undefined)}
         />
+
+
       </IonContent>
     </IonPage>
   );
