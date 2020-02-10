@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Redirect, Route } from 'react-router-dom';
 import {
   IonApp,
@@ -10,7 +10,7 @@ import {
   IonTabs
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { flash, send, images } from 'ionicons/icons';
+import { flash, send, images, cash } from 'ionicons/icons'
 import Tab1 from './pages/Tab1';
 import Tab2 from './pages/Tab2';
 import Tab3 from './pages/Tab3';
@@ -35,16 +35,18 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 
-const App: React.FC = () => (
+const App: React.FC = () => {
+  const [wallet,setWallet] = useState({})
+  return (
   <IonApp>
     <IonReactRouter>
       <IonTabs>
         <IonRouterOutlet>
-          <Route path="/tab1" component={Tab1} exact={true} />
-          <Route path="/tab2" component={Tab2} exact={true} />
+          <Route path="/tab1" render={(props:any) => <Tab1 {...props} wallet={wallet} setWallet={setWallet} />} exact={true} />
+          <Route path="/tab2" render={(props:any) => <Tab2 {...props} wallet={wallet} setWallet={setWallet} />} exact={true} />
+          <Route path="/tab3" render={(props:any) => <Tab3 {...props} wallet={wallet} setWallet={setWallet} />} exact={true} />
           <Route path="/tab2/details" component={Details} />
-          <Route path="/tab3" component={Tab3} />
-          <Route path="/" render={() => <Redirect to="/tab1" />} exact={true} />
+          <Route path="/" render={() => <Redirect to="/tab2" />} exact={true} />
         </IonRouterOutlet>
         <IonTabBar slot="bottom">
           <IonTabButton tab="tab1" href="/tab1">
@@ -56,13 +58,13 @@ const App: React.FC = () => (
             <IonLabel>Photos</IonLabel>
           </IonTabButton>
           <IonTabButton tab="tab3" href="/tab3">
-            <IonIcon icon={send} />
-            <IonLabel>Tab Three</IonLabel>
+            <IonIcon icon={cash} />
+            <IonLabel>Wallet</IonLabel>
           </IonTabButton>
         </IonTabBar>
       </IonTabs>
     </IonReactRouter>
   </IonApp>
-);
+)}
 
 export default App;

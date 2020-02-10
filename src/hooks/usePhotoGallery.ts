@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react'
 import { useCamera } from '@ionic/react-hooks/camera';
 import { useFilesystem, base64FromPath } from '@ionic/react-hooks/filesystem';
 import { useStorage } from '@ionic/react-hooks/storage';
 import { isPlatform } from '@ionic/react';
-import { CameraResultType, CameraSource, CameraPhoto, Capacitor, FilesystemDirectory } from "@capacitor/core";
+import { CameraResultType, CameraSource, CameraPhoto, Capacitor, FilesystemDirectory } from '@capacitor/core'
 
 const PHOTO_STORAGE = "photos";
 
@@ -16,7 +16,7 @@ export function usePhotoGallery() {
 
   useEffect(() => {
     const loadSaved = async () => {
-      const photosString = await get('photos');
+      const photosString = await get(PHOTO_STORAGE);
       const photosInStorage = (photosString ? JSON.parse(photosString) : []) as Photo[];
       // If running on the web...
       if (!isPlatform('hybrid')) {
@@ -82,7 +82,8 @@ export function usePhotoGallery() {
       // Get the new, complete filepath of the photo saved on filesystem
       const fileUri = await getUri({
         directory: FilesystemDirectory.Data,
-        path: fileName
+        path: fileName,
+        
       });
 
       // Display the new image by rewriting the 'file://' path to HTTP
