@@ -8,7 +8,8 @@ import { JWKInterface } from 'arweave/web/lib/wallet';
 import { wallet } from 'ionicons/icons';
 import { isPlatform } from '@ionic/react';
 import { Buffer } from 'buffer';
-import { decode } from 'base64-arraybuffer'
+import * as b64abuff from 'base64-arraybuffer'
+const ImageDataURI = require('image-data-uri')
 
 
 const arweave = Arweave.init({})
@@ -104,19 +105,13 @@ export function useArweave() {
 			console.log('sending picture...')
 			alert('sending picture...')
 			
-			const _base64ToArrayBuffer = (base64: string) => {
-				var binary_string = window.atob(base64);
-				var len = binary_string.length;
-				var bytes = new Uint8Array(len);
-				for (var i = 0; i < len; i++) {
-						bytes[i] = binary_string.charCodeAt(i);
-				}
-				return bytes.buffer;
-			}
+			let decodedDataUri = ImageDataURI.decode(picBase64)
+
+			console.log(decodedDataUri)
 
 			// Create Transaction & fill it with data and tags
 			let tx = await arweave.createTransaction({
-				data: new Uint8Array(_base64ToArrayBuffer(picBase64) )  /********************************************** */
+				data: decodedDataUri.dataBuffer
 			}, wallet as JWKInterface)
 			
 
