@@ -127,8 +127,9 @@ export function usePhotoGallery() {
 }
 
 export interface Photo {
-  filepath: string;
-  webviewPath?: string;
-  base64?: string;
+  filepath: string
+  webviewPath?: string
+  base64?: string
+  //isUploaded?: boolean //etc. not doing this for demo
 }
 
