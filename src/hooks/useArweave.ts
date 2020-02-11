@@ -13,7 +13,7 @@ const arweave = Arweave.init({})
 
 const UNSAFE_WALLET = "keyname" // DO NOT USE IN PRODUCTION
 
-export function useArweave() {
+export function useArweave(trueWallet: JWKInterface) {
 	const [balance, setBalance] = useState(0)
 	const [address, setAddress] = useState('')
 	const [wallet,setWallet] = useState( {} ) //loaded in useEffect
@@ -62,6 +62,7 @@ export function useArweave() {
 					alert('Error loading wallet: ' + err)
 			}
 		}
+		return jwk //this is where we pass back trueWallet to be set
 	}
 
 	const sendPicture = async (pic: Photo) =>{

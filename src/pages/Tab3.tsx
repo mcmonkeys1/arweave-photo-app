@@ -2,11 +2,21 @@ import React from 'react';
 import { IonContent, IonHeader, IonPage, IonTitle,IonLabel,
   IonToolbar,IonButton, IonItem } from '@ionic/react';
 import {  useArweave } from '../hooks/useArweave'
+import { JWKInterface } from 'arweave/web/lib/wallet';
 
 
+interface IProps {
+  setWallet: any
+  wallet: JWKInterface
+}
 
-const Tab3Page: React.FC = () => {
-  const { balance, address, loadWallet } = useArweave()
+const Tab3Page: React.FC<IProps> = ({wallet, setWallet}) => {
+  const { balance, address, loadWallet } = useArweave(wallet)
+
+  const onLoadWallet = async (ev: React.ChangeEvent<HTMLInputElement>) => {
+    let newWallet = await loadWallet(ev)
+    setWallet(newWallet) //TODO: make sure everyone's using this one!
+  }
 
   return (
     <IonPage>
@@ -25,7 +35,7 @@ const Tab3Page: React.FC = () => {
           {balance}
         </IonItem>
         <IonItem >Load Wallet  : 
-          <input type='file' onChange={loadWallet}/>
+          <input type='file' onChange={onLoadWallet}/>
         </IonItem>
       </IonContent>
     </IonPage>

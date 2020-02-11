@@ -3,11 +3,18 @@ import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonFab, IonFabBut
 import { camera, trash, close, send } from 'ionicons/icons';
 import { usePhotoGallery, Photo } from '../hooks/usePhotoGallery';
 import {  useArweave } from '../hooks/useArweave'
+import { JWKInterface } from 'arweave/web/lib/wallet';
 
-const Tab2: React.FC = () => {
+
+interface IProps {
+  setWallet: any
+  wallet: JWKInterface
+}
+
+const Tab2: React.FC<IProps> = ({wallet}) => {
   const { deletePhoto, photos, takePhoto } = usePhotoGallery();
   const [selectedPhoto, setSelectedPhoto] = useState<Photo>();
-  const {sendPicture } = useArweave();
+  const {sendPicture } = useArweave(wallet);
 
   return (
     <IonPage>
