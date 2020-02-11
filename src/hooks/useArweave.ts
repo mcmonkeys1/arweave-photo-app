@@ -5,10 +5,7 @@ import { FilesystemDirectory } from '@capacitor/core'
 import { Photo } from './usePhotoGallery'
 import Arweave from 'arweave/web'
 import { JWKInterface } from 'arweave/web/lib/wallet';
-import { wallet } from 'ionicons/icons';
 import { isPlatform } from '@ionic/react';
-import { Buffer } from 'buffer';
-import * as b64abuff from 'base64-arraybuffer'
 const ImageDataURI = require('image-data-uri')
 
 
@@ -80,19 +77,13 @@ export function useArweave() {
 			const file = await readFile({
 				path: pic.filepath,
 			})
-			// //what do we use???
-			// pic.base64 / file.data / ???
-
-			console.log('pic.base64 ******************* '+pic.base64)
-			console.log('file.data ******************* '+file.data)
 
 			picBase64 = file.data 
 		}
 		else{ //not Capacitor env
 			picBase64 = pic.base64!
-			console.log(picBase64)
 		}
-
+		
 		if(picBase64){
 			// check if too big
 			const MAX_SIZE = 10*1024*1024
@@ -105,9 +96,11 @@ export function useArweave() {
 			console.log('sending picture...')
 			alert('sending picture...')
 			
+			console.log('**********************************************************')
+			console.log(picBase64)
+			console.log('**********************************************************')
 			let decodedDataUri = ImageDataURI.decode(picBase64)
 
-			console.log(decodedDataUri)
 
 			// Create Transaction & fill it with data and tags
 			let tx = await arweave.createTransaction({
