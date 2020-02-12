@@ -27,11 +27,13 @@ export function useArweave(trueWallet: JWKInterface) {
 			try {
 				let jwk = JSON.parse(walletstring as string)
 
-				setWallet(jwk)
-				let address = await arweave.wallets.jwkToAddress(jwk as JWKInterface)
-				setAddress(address)
-				let winston = await arweave.wallets.getBalance(address)
-				setBalance( parseFloat(arweave.ar.winstonToAr(winston)) )
+				if(jwk){
+					setWallet(jwk)
+					let address = await arweave.wallets.jwkToAddress(jwk as JWKInterface)
+					setAddress(address)
+					let winston = await arweave.wallets.getBalance(address)
+					setBalance( parseFloat(arweave.ar.winstonToAr(winston)) )
+				}
 
 			} catch (err) {
 				console.log('Error loading wallet: ' + err)
@@ -82,7 +84,8 @@ export function useArweave(trueWallet: JWKInterface) {
 			picBase64 = file.data 
 		}
 		else{ //not Capacitor env
-			picBase64 = pic.base64!
+			let decodedDataUri = ImageDataURI.decode(pic.base64)
+			picBase64 = decodedDataUri.dataBuffer
 		}
 		
 		if(picBase64){
@@ -100,12 +103,11 @@ export function useArweave(trueWallet: JWKInterface) {
 			console.log('**********************************************************')
 			console.log(picBase64)
 			console.log('**********************************************************')
-			let decodedDataUri = ImageDataURI.decode(picBase64)
 
 
 			// Create Transaction & fill it with data and tags
 			let tx = await arweave.createTransaction({
-				data: decodedDataUri.dataBuffer
+				data: picBase64
 			}, wallet as JWKInterface)
 			
 

@@ -62,9 +62,9 @@ export function usePhotoGallery() {
     // "hybrid" will detect Cordova or Capacitor;
     if (isPlatform('hybrid')) {
       const file = await readFile({
-        path: photo.path!
+        path: photo.path!  //file://xxxxxxx
       });
-      base64Data = file.data;
+      base64Data = file.data; //reads base64 for some reason? data: string
     } else {
       base64Data = await base64FromPath(photo.webPath!);
     }
