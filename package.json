@@ -20,6 +20,7 @@
     "@types/react-router": "^5.1.4",
     "@types/react-router-dom": "^5.1.3",
     "arweave": "^1.6.0",
+    "base64-to-uint8array": "^1.0.0",
     "image-data-uri": "^2.0.1",
     "ionicons": "^4.6.3",
     "react": "^16.12.0",

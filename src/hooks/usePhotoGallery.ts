@@ -26,7 +26,7 @@ export function usePhotoGallery() {
             directory: FilesystemDirectory.Data
           });
           // Web platform only: Save the photo into the base64 field
-          photo.base64 = `data:image/jpeg;base64,${file.data}`;
+          photo.base64uri = `data:image/jpeg;base64,${file.data}`;
         }
       }
       setPhotos(photosInStorage);
@@ -51,7 +51,7 @@ export function usePhotoGallery() {
           // Don't save the base64 representation of the photo data, 
           // since it's already saved on the Filesystem
           const photoCopy = { ...p };
-          delete photoCopy.base64;
+          delete photoCopy.base64uri;
           return photoCopy;
         })));
 
@@ -129,7 +129,7 @@ export function usePhotoGallery() {
 export interface Photo {
   filepath: string
   webviewPath?: string
-  base64?: string
+  base64uri?: string
   //isUploaded?: boolean //etc. not doing this for demo
 }
 

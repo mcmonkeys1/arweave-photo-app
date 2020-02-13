@@ -28,7 +28,7 @@ const Tab2: React.FC<IProps> = ({wallet}) => {
           <IonRow>
             {photos.map((photo, index) => (
               <IonCol size="6" key={index}>
-                <IonImg onClick={() => setSelectedPhoto(photo)} src={photo.base64 ?? photo.webviewPath} />
+                <IonImg onClick={() => setSelectedPhoto(photo)} src={photo.base64uri ?? photo.webviewPath} />
               </IonCol>
             ))}
           </IonRow>

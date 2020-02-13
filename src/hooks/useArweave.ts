@@ -6,6 +6,7 @@ import { Photo } from './usePhotoGallery'
 import Arweave from 'arweave/web'
 import { JWKInterface } from 'arweave/web/lib/wallet';
 import { isPlatform } from '@ionic/react';
+const toUint8Array = require('base64-to-uint8array')
 const ImageDataURI = require('image-data-uri')
 
 
@@ -74,24 +75,25 @@ export function useArweave(trueWallet: JWKInterface) {
 			return false
 		}
 
-		let picBase64: string
+		let picDecoded
 
 		if(isPlatform('hybrid')){
 			const file = await readFile({
 				path: pic.filepath,
 			})
 
-			picBase64 = file.data 
+			let picBase64 = file.data 
+			picDecoded = toUint8Array(picBase64)
 		}
 		else{ //not Capacitor env
-			let decodedDataUri = ImageDataURI.decode(pic.base64)
-			picBase64 = decodedDataUri.dataBuffer
+			let decodedDataUri = ImageDataURI.decode(pic.base64uri)
+			picDecoded = decodedDataUri.dataBuffer
 		}
 		
-		if(picBase64){
+		if(picDecoded){
 			// check if too big
 			const MAX_SIZE = 10*1024*1024
-			let size = picBase64.length
+			let size = picDecoded.length
 			if(size > MAX_SIZE){
 				console.error("file too big:"+size)
 				alert("file too big:"+size+'\nand I need to fix this popup')
@@ -101,13 +103,13 @@ export function useArweave(trueWallet: JWKInterface) {
 			alert('sending picture...')
 			
 			console.log('**********************************************************')
-			console.log(picBase64)
+			console.log(picDecoded)
 			console.log('**********************************************************')
 
 
 			// Create Transaction & fill it with data and tags
 			let tx = await arweave.createTransaction({
-				data: picBase64
+				data: picDecoded
 			}, wallet as JWKInterface)
 			
 
