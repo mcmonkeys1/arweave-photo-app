@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { useFilesystem, base64FromPath } from '@ionic/react-hooks/filesystem';
+import { useFilesystem } from '@ionic/react-hooks/filesystem';
 import { useStorage } from '@ionic/react-hooks/storage';
-import { FilesystemDirectory } from '@capacitor/core'
 import { Photo } from './usePhotoGallery'
 import Arweave from 'arweave/web'
 import { JWKInterface } from 'arweave/web/lib/wallet';
@@ -19,7 +18,7 @@ export function useArweave(trueWallet: JWKInterface) {
 	const [address, setAddress] = useState('')
 	const [wallet,setWallet] = useState( {} ) //loaded in useEffect
 	const { get, set } = useStorage();
-	const { getUri, readFile } = useFilesystem();
+	const { readFile } = useFilesystem();
 
 	//WE SHOULDN'T BE SAVING THE WALLET TO LOCAL STORAGE LIKE THIS!
 	useEffect( () => {
@@ -99,12 +98,7 @@ export function useArweave(trueWallet: JWKInterface) {
 				alert("file too big:"+size+'\nand I need to fix this popup')
 				return false
 			}
-			console.log('sending picture...')
 			alert('sending picture...')
-			
-			console.log('**********************************************************')
-			console.log(picDecoded)
-			console.log('**********************************************************')
 
 
 			// Create Transaction & fill it with data and tags
@@ -120,10 +114,7 @@ export function useArweave(trueWallet: JWKInterface) {
 			
 			await arweave.transactions.sign(tx, wallet as JWKInterface);
 			let txid = tx.id
-			console.log('**********************************************************')
 			console.log('txid:'+txid)
-			console.log('**********************************************************')
-			console.log(tx)
 
 
 
@@ -149,9 +140,8 @@ export function useArweave(trueWallet: JWKInterface) {
 				// }
 				let msg = "Permaweb save status: " + response.status
 				
-				console.log((new Date())+'::'+msg)
 				let duration = (Date.now() - timeStart)/(1000*60) //minutes
-				console.log(msg+' in '+duration+' minutes')
+				console.log((new Date())+'::'+msg+' in '+duration+' minutes')
 				if(response.status==200){ 
 					clearInterval(timer) 
 				}
@@ -167,11 +157,31 @@ export function useArweave(trueWallet: JWKInterface) {
 		}
 	}
 
+	const getUploads = async () => {
+		let urls: string[] = []
+
+		console.log(address)
+		let gqlQuery = `{
+			transactions(from: "${address}", tags: [{name: "App-Name", value: "hotdog-permasnap-demo"}]){
+				id
+			}
+		}`
+
+		let res = await arweave.api.post('arql', { query: gqlQuery })
+
+		let txids = res.data.data.transactions
+
+		urls = txids.map( (t: { id: string; }) => 'https://arweave.net/'+t.id)
+
+		return urls
+	}
+
 	return {
 		balance,
 		address,
 		loadWallet,
-		sendPicture
+		sendPicture,
+		getUploads
 	}
 }
 

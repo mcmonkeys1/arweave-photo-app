@@ -1,6 +1,6 @@
 import React from 'react';
 import { IonContent, IonHeader, IonPage, IonTitle,IonLabel,
-  IonToolbar,IonButton, IonItem } from '@ionic/react';
+  IonToolbar, IonItem } from '@ionic/react';
 import {  useArweave } from '../hooks/useArweave'
 import { JWKInterface } from 'arweave/web/lib/wallet';
 

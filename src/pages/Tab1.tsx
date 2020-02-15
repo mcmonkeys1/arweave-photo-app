@@ -10,35 +10,47 @@ import {
   IonTitle,
   IonToolbar
 } from '@ionic/react';
-import { book, build, colorFill, grid, photos } from 'ionicons/icons';
-import React from 'react';
+import { photos } from 'ionicons/icons';
+import React, { useEffect, useState } from 'react';
+import {useArweave } from '../hooks/useArweave'
+import { JWKInterface } from 'arweave/web/lib/wallet';
 
+interface IProps {
+  setWallet: any
+  wallet: JWKInterface
+}
 
-const Tab1: React.FC = () => {
+const Tab1: React.FC<IProps> = ({wallet}) => {
+  const { getUploads } = useArweave(wallet)
+  const [ urls, setUrls] = useState<string[]>([])
+
+  const asyncGetUploads = async () => {
+    const sArray = await getUploads()
+    setUrls(sArray)
+  }
+
+  useEffect( () => {// look for new uploads
+    asyncGetUploads()
+  })
+
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Previously Uploaded Files</IonTitle>
+          <IonTitle>Share your permanent photos</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent>
         <IonList lines="none">
           <IonListHeader>
-            <IonLabel>List of links to share here.</IonLabel>
+            <IonLabel>Links to files uploaded with current wallet</IonLabel>
           </IonListHeader>
-          <IonItem href="https://ionicframework.com/docs/" target="_blank">
-            <IonIcon slot="start" color="medium" icon={photos} />
-            <IonLabel>Arweave link</IonLabel>
-          </IonItem>
-          <IonItem href="https://ionicframework.com/docs/building/scaffolding" target="_blank">
-            <IonIcon slot="start" color="medium" icon={photos} />
-            <IonLabel>Another link to image</IonLabel>
-          </IonItem>
-          <IonItem href="https://ionicframework.com/docs/layout/structure" target="_blank">
-            <IonIcon slot="start" color="medium" icon={photos} />
-            <IonLabel>Etc...</IonLabel>
-          </IonItem>
+          { urls.map(url => (
+            <IonItem href={url} key={url} target="_blank">
+              <IonIcon slot="start" color="medium" icon={photos} />
+              <IonLabel>{url}</IonLabel>
+            </IonItem>
+          ))}
         </IonList>
       </IonContent>
     </IonPage>
