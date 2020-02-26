@@ -86,16 +86,14 @@ export function usePhotoGallery() {
         
       });
 
-      // Display the new image by rewriting the 'file://' path to HTTP
-      // Details: https://ionicframework.com/docs/building/webview#file-protocol
+      // Display the new image by rewriting the 'file://' path to HTTP. Details: https://ionicframework.com/docs/building/webview#file-protocol
       return {
         filepath: fileUri.uri,
         webviewPath: Capacitor.convertFileSrc(fileUri.uri),
       };
     }
     else {
-      // Use webPath to display the new image instead of base64 since it's 
-      // already loaded into memory
+      // Use webPath to display the new image instead of base64 since it's already loaded into memory
       return {
         filepath: fileName,
         webviewPath: cameraPhoto.webPath

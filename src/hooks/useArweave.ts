@@ -160,7 +160,6 @@ export function useArweave(trueWallet: JWKInterface) {
 	const getUploads = async () => {
 		let urls: string[] = []
 
-		console.log(address)
 		let gqlQuery = `{
 			transactions(from: "${address}", tags: [{name: "App-Name", value: "hotdog-permasnap-demo"}]){
 				id
@@ -168,9 +167,7 @@ export function useArweave(trueWallet: JWKInterface) {
 		}`
 
 		let res = await arweave.api.post('arql', { query: gqlQuery })
-
 		let txids = res.data.data.transactions
-
 		urls = txids.map( (t: { id: string; }) => 'https://arweave.net/'+t.id)
 
 		return urls
